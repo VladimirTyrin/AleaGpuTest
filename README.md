@@ -1,8 +1,8 @@
 ## Config
 
-CPU: Intel Core i7-6820HK (4 cores / 8 threads)
-GPU: NVidia GeForce GTX 1080 (2560 CUDA cores)
-Runtime: .NET Framework 4.7.2 (CLR 4.0.30319.42000), 64bit RyuJIT-v4.7.3160.0, GC=Concurrent Workstation
+* CPU: Intel Core i7-6820HK (4 cores / 8 threads)  
+* GPU: NVidia GeForce GTX 1080 (2560 CUDA cores)  
+* Runtime: .NET Framework 4.7.2 (CLR 4.0.30319.42000), 64bit RyuJIT-v4.7.3160.0, GC=Concurrent Workstation  
 
 ## Result
 

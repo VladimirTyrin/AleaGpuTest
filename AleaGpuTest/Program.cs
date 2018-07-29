@@ -1,4 +1,6 @@
-﻿using BenchmarkDotNet.Running;
+﻿using System;
+using System.Numerics;
+using BenchmarkDotNet.Running;
 
 namespace AleaGpuTest
 {
