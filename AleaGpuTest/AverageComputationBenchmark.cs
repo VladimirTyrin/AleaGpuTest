@@ -27,24 +27,13 @@ namespace AleaGpuTest
         [Benchmark]
         public double SimpleAverage()
         {
-            return RangeSum(_data, 0, DataSize) / DataSize;
+            return SimpleRangeSum(_data, 0, DataSize) / DataSize;
         }
 
         [Benchmark]
         public double ParallelAverage()
         {
-            var parts = Environment.ProcessorCount;
-            var partSize = DataSize / parts;
-            var averages = new double[parts];
-
-            Parallel.For(0, parts, part =>
-            {
-                var lowerBound = partSize * part;
-                var upperBound = lowerBound + partSize;
-                averages[part] = RangeSum(_data, lowerBound, upperBound) / partSize;
-            });
-
-            return averages.Average();
+            return ParallelAverage(SimpleRangeSum);
         }
 
         [Benchmark]
@@ -56,6 +45,18 @@ namespace AleaGpuTest
         [Benchmark]
         public double ParallelVectorizedAverage()
         {
+            return ParallelAverage(VectorRangeSum);
+        }
+
+        [Benchmark]
+        public double GpuAverage()
+        {
+            var gpu = Gpu.Default;
+            return gpu.Average(_data);
+        }
+
+        private double ParallelAverage(Func<float[], int, int, double> rangeSumMethod)
+        {
             var parts = Environment.ProcessorCount;
             var partSize = DataSize / parts;
             var averages = new double[parts];
@@ -64,17 +65,10 @@ namespace AleaGpuTest
             {
                 var lowerBound = partSize * part;
                 var upperBound = lowerBound + partSize;
-                averages[part] = VectorRangeSum(_data, lowerBound, upperBound) / partSize;
+                averages[part] = rangeSumMethod(_data, lowerBound, upperBound) / partSize;
             });
 
             return averages.Average();
-        }
-
-        [Benchmark]
-        public double GpuAverage()
-        {
-            var gpu = Gpu.Default;
-            return gpu.Average(_data);
         }
 
         private static double VectorRangeSum(float[] array, int lowerInclusive, int upperExclusize)
@@ -97,7 +91,7 @@ namespace AleaGpuTest
             return totalSum;
         }
 
-        private static double RangeSum(float[] array, int lowerInclusive, int upperExclusize)
+        private static double SimpleRangeSum(float[] array, int lowerInclusive, int upperExclusize)
         {
             var sum = 0d;
             for (var i = lowerInclusive; i < upperExclusize; ++i)
