@@ -18,6 +18,12 @@ namespace AleaGpuTest
         }
 
         [Benchmark]
+        public double LinqAverage()
+        {
+            return _data.Average();
+        }
+
+        [Benchmark]
         public double SimpleAverage()
         {
             return RangeSum(_data, 0, DataSize) / DataSize;
