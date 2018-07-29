@@ -24,7 +24,7 @@ namespace AleaGpuTest
             return _data.Average();
         }
 
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public double SimpleAverage()
         {
             return SimpleRangeSum(_data, 0, DataSize) / DataSize;
